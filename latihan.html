@@ -2,29 +2,146 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>Latihan Pemfaktoran</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Aktiviti Interaktif - Padankan Pemfaktoran</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      max-width: 1000px;
+      margin: auto;
+      flex-wrap: wrap;
+    }
+
+    .column {
+      flex: 0 0 45%;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      min-width: 300px;
+    }
+
+    .item {
+      background: #c7d2fe;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      cursor: grab;
+    }
+
+    .dropzone {
+      background: #f1f5f9;
+      padding: 20px;
+      margin: 15px 0;
+      border: 2px dashed #94a3b8;
+      border-radius: 5px;
+      min-height: 50px;
+      transition: background-color 0.3s;
+    }
+
+    .correct {
+      background-color: #d1fae5 !important;
+    }
+
+    .wrong {
+      background-color: #fecaca !important;
+    }
+
+    .button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #1e40af;
+    }
+  </style>
 </head>
 <body>
-  <header><h1>Latihan Topikal</h1></header>
-  <nav>
-    <a href="index.html">Muka Depan</a>
-    <a href="nota.html">Nota</a>
-    <a href="aktiviti.html">Aktiviti</a>
-  </nav>
-  <main>
-    <section>
-      <h2>Latihan 1</h2>
-      <p>Faktorkan: <strong>x² + 7x + 12</strong></p>
-    </section>
-    <section>
-      <h2>Latihan 2</h2>
-      <p>Faktorkan: <strong>x² - 9</strong></p>
-    </section>
-    <section>
-      <h2>Latihan 3</h2>
-      <p>Faktorkan: <strong>3x² + 12x</strong></p>
-    </section>
-  </main>
+
+<h2>🧠 Aktiviti Interaktif: Padankan Soalan dengan Jawapan</h2>
+
+<div class="container">
+  <!-- Soalan -->
+  <div class="column">
+    <h3>Soalan</h3>
+    <div class="dropzone" data-answer="(x + 2)(x + 3)">x² + 5x + 6</div>
+    <div class="dropzone" data-answer="(x + 4)(x - 4)">x² - 16</div>
+    <div class="dropzone" data-answer="5x(x - 2)">5x² - 10x</div>
+  </div>
+
+  <!-- Jawapan -->
+  <div class="column">
+    <h3>Jawapan</h3>
+    <div class="item" draggable="true" data-value="(x + 2)(x + 3)">(x + 2)(x + 3)</div>
+    <div class="item" draggable="true" data-value="5x(x - 2)">5x(x - 2)</div>
+    <div class="item" draggable="true" data-value="(x + 4)(x - 4)">(x + 4)(x - 4)</div>
+  </div>
+</div>
+
+<button class="button" onclick="checkAnswers()">Semak Jawapan</button>
+
+<script>
+  const items = document.querySelectorAll('.item');
+  const dropzones = document.querySelectorAll('.dropzone');
+
+  // Set up drag
+  items.forEach(item => {
+    item.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', item.getAttribute('data-value'));
+    });
+  });
+
+  // Set up dropzone
+  dropzones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault(); // this is crucial to allow dropping!
+    });
+
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const droppedText = e.dataTransfer.getData('text/plain');
+      zone.setAttribute('data-user', droppedText);
+      zone.innerHTML = droppedText;
+      zone.classList.remove('correct', 'wrong');
+    });
+  });
+
+  // Check answers
+  function checkAnswers() {
+    dropzones.forEach(zone => {
+      const correct = zone.getAttribute('data-answer');
+      const user = zone.getAttribute('data-user');
+
+      if (user === correct) {
+        zone.classList.add('correct');
+        zone.classList.remove('wrong');
+      } else {
+        zone.classList.add('wrong');
+        zone.classList.remove('correct');
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
